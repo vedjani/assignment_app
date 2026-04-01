@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], input[type="date"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .delete-btn {
+            background-color: #f44336;
+        }
+        .delete-btn:hover {
+            background-color: #da190b;
+        }
+        .book-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+        .messages {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<a href="/q12/" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; text-decoration: none; padding: 10px 20px; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; color: #fff; font-family: sans-serif; font-weight: 600; font-size: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: all 0.3s ease; display: flex; align-items: center; gap: 8px;">
+    Next App
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 1 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/></svg>
+</a>
+
+
+
+
+    <h1>Book Management System</h1>
+    
+    <div class="messages">
+        {% for message in messages %}
+            <p style="color: green;">{{ message }}</p>
+        {% endfor %}
+    </div>
+    
+    <h2>Add New Book</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.title.id_for_label }}">Title:</label>
+            {{ form.title }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.author.id_for_label }}">Author:</label>
+            {{ form.author }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.publication_date.id_for_label }}">Publication Date:</label>
+            {{ form.publication_date }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.isbn.id_for_label }}">ISBN:</label>
+            {{ form.isbn }}
+        </div>
+        <button type="submit">Add Book</button>
+    </form>
+    
+    <h2>Book List</h2>
+    {% for book in books %}
+        <div class="book-item">
+            <h3>{{ book.title }}</h3>
+            <p><strong>Author:</strong> {{ book.author }}</p>
+            <p><strong>Publication Date:</strong> {{ book.publication_date }}</p>
+            <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+            <form method="post" action="{% url 'delete_book' book.id %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="delete-btn">Delete Book</button>
+            </form>
+        </div>
+    {% empty %}
+        <p>No books added yet.</p>
+    {% endfor %}
+</body>
+</html>

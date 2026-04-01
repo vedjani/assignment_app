@@ -1,0 +1,148 @@
+﻿<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <title>Browse Books - Library Management System</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f8f9fa; color: #333; }
+    .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1rem 0; text-align: center; }
+    .nav { background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 1rem 0; }
+    .nav-links { display: flex; justify-content: center; gap: 2rem; list-style: none; }
+    .nav-links a { text-decoration: none; color: #333; font-weight: 500; padding: 0.5rem 1rem; border-radius: 5px; transition: all 0.3s; }
+    .nav-links a:hover { background: #667eea; color: white; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+    .filters { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 2rem; }
+    .filter-form { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }
+    .filter-group { display: flex; flex-direction: column; }
+    .filter-group label { font-weight: bold; margin-bottom: 0.5rem; }
+    .filter-group select, .filter-group input { padding: 0.5rem; border: 1px solid #ddd; border-radius: 5px; }
+    .btn { background: #667eea; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 5px; cursor: pointer; text-decoration: none; display: inline-block; transition: background 0.3s; }
+    .btn:hover { background: #5a67d8; }
+    .btn-secondary { background: #e2e8f0; color: #333; }
+    .btn-secondary:hover { background: #cbd5e0; }
+    .books-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
+    .book-card { background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow: hidden; transition: transform 0.3s; }
+    .book-card:hover { transform: translateY(-5px); }
+    .book-header { padding: 1.5rem; background: #f8f9fa; }
+    .book-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 0.5rem; color: #333; }
+    .book-author { color: #666; margin-bottom: 0.5rem; }
+    .book-meta { display: flex; justify-content: space-between; font-size: 0.9rem; color: #666; margin-bottom: 1rem; }
+    .book-status { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
+    .status-available { background: #d4edda; color: #155724; }
+    .status-borrowed { background: #f8d7da; color: #721c24; }
+    .status-reserved { background: #fff3cd; color: #856404; }
+    .book-content { padding: 1.5rem; }
+    .book-description { color: #666; margin-bottom: 1rem; line-height: 1.5; }
+    .book-details { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; font-size: 0.9rem; margin-bottom: 1rem; }
+    .book-actions { padding: 1rem 1.5rem; background: #f8f9fa; }
+    .no-books { text-align: center; padding: 3rem; color: #666; }
+  </style>
+</head>
+<body>
+
+<a href="/q19/" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; text-decoration: none; padding: 10px 20px; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; color: #fff; font-family: sans-serif; font-weight: 600; font-size: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: all 0.3s ease; display: flex; align-items: center; gap: 8px;">
+    Next App
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 1 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/></svg>
+</a>
+
+
+
+
+  <div class='header'>
+    <div class='container'>
+      <h1> Browse Books</h1>
+    </div>
+  </div>
+
+  <nav class='nav'>
+    <div class='container'>
+      <ul class='nav-links'>
+        <li><a href='/q15/'>Home</a></li>
+        <li><a href='/q15/books/'>Browse Books</a></li>
+        <li><a href='/q15/authors/'>Authors</a></li>
+        <li><a href='/q15/categories/'>Categories</a></li>
+        {% if user.is_authenticated %}
+          <li><a href='/q15/my-loans/'>My Loans</a></li>
+          <li><a href='/accounts/logout/'>Logout ({{ user.username }})</a></li>
+        {% else %}
+          <li><a href='/accounts/login/'>Login</a></li>
+        {% endif %}
+        <li><a href='/admin/' target='_blank'>Admin Panel</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class='container'>
+    <div class='filters'>
+      <form method='get' class='filter-form'>
+        <div class='filter-group'>
+          <label for='search'>Search Books:</label>
+          <input type='text' id='search' name='search' value='{{ search_query }}' placeholder='Title, author, or ISBN...'>
+        </div>
+        <div class='filter-group'>
+          <label for='category'>Category:</label>
+          <select id='category' name='category'>
+            <option value=''>All Categories</option>
+            {% for category in categories %}
+            <option value='{{ category.id }}' {% if selected_category == category.id|stringformat:'s' %}selected{% endif %}>{{ category.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class='filter-group'>
+          <label for='status'>Status:</label>
+          <select id='status' name='status'>
+            <option value=''>All Status</option>
+            <option value='available' {% if selected_status == 'available' %}selected{% endif %}>Available</option>
+            <option value='borrowed' {% if selected_status == 'borrowed' %}selected{% endif %}>Borrowed</option>
+            <option value='reserved' {% if selected_status == 'reserved' %}selected{% endif %}>Reserved</option>
+          </select>
+        </div>
+        <button type='submit' class='btn'>Search & Filter</button>
+        <a href='/q15/books/' class='btn btn-secondary'>Clear Filters</a>
+      </form>
+    </div>
+
+    {% if books %}
+    <div class='books-grid'>
+      {% for book in books %}
+      <div class='book-card'>
+        <div class='book-header'>
+          <div class='book-title'>{{ book.title }}</div>
+          <div class='book-author'>by {{ book.authors.all|join:', ' }}</div>
+          <div class='book-meta'>
+            <span>{{ book.publication_date|date:'Y' }}</span>
+            <span class='book-status status-{{ book.status }}'>{{ book.get_status_display }}</span>
+          </div>
+        </div>
+        <div class='book-content'>
+          {% if book.description %}
+          <div class='book-description'>{{ book.description|truncatechars:150 }}</div>
+          {% endif %}
+          <div class='book-details'>
+            <div><strong>Publisher:</strong> {{ book.publisher.name|default:'N/A' }}</div>
+            <div><strong>Pages:</strong> {{ book.pages }}</div>
+            <div><strong>ISBN:</strong> {{ book.isbn|default:'N/A' }}</div>
+            <div><strong>Stock:</strong> {{ book.stock_quantity }}</div>
+          </div>
+        </div>
+        <div class='book-actions'>
+          <a href='/q15/books/{{ book.id }}/' class='btn'>View Details</a>
+          {% if user.is_authenticated and book.status == 'available' and book.stock_quantity > 0 %}
+          <a href='/q15/borrow/{{ book.id }}/' class='btn' onclick='return confirm(\"Are you sure you want to borrow this book?\")'>Borrow Book</a>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class='no-books'>
+      <h2>No books found</h2>
+      <p>Try adjusting your search criteria or browse all books.</p>
+      <a href='/q15/books/' class='btn'>Show All Books</a>
+    </div>
+    {% endif %}
+  </div>
+</body>
+</html>

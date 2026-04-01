@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>View Doctors - Doctor Finder</title>
+    <style>
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f8ff; color: #1f2f53; }
+        .page { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .nav { margin-bottom: 20px; background: #2f5bb5; color: #fff; padding: 12px; border-radius: 8px; }
+        .nav a { color: #fff; text-decoration: none; margin-right: 14px; }
+        h1 { margin-bottom: 10px; }
+        .doctors { display: grid; gap: 12px; }
+        .doctor { background: #fff; padding: 12px; border-radius: 8px; border: 1px solid #c3d2ee; }
+        .doctor h3 { margin: 0 0 6px; }
+        .doctor p { margin: 2px 0; }
+    </style>
+</head>
+<body>
+
+<a href="/q10/" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; text-decoration: none; padding: 10px 20px; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; color: #fff; font-family: sans-serif; font-weight: 600; font-size: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: all 0.3s ease; display: flex; align-items: center; gap: 8px;">
+    Next App
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 1 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/></svg>
+</a>
+
+
+
+
+    <div class="page">
+        <div class="nav">
+            <a href="{% url 'q9:home9' %}">Home</a>
+            <a href="{% url 'q9:about' %}">About</a>
+            <a href="{% url 'q9:contact' %}">Contact</a>
+            <a href="{% url 'q9:view_doctors' %}">View Doctors</a>
+        </div>
+        <h1>View Doctors</h1>
+        <div class="doctors">
+            {% if doctors %}
+                {% for doctor in doctors %}
+                    <div class="doctor">
+                        <h3>{{ doctor.name }} ({{ doctor.speciality }})</h3>
+                        <p>Experience: {{ doctor.experience_years }} years</p>
+                        <p>Hospital: {{ doctor.hospital }}</p>
+                        <p>Email: {{ doctor.email }}</p>
+                        <p>Phone: {{ doctor.phone|default:'N/A' }}</p>
+                        <p>Bio: {{ doctor.bio|default:'No bio provided' }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No doctors available. Use admin to add doctors.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

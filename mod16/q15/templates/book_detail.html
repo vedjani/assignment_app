@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ book.title }} - Library Management System</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; background: #f8f9fa; color: #333; }
+    .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1rem 0; text-align: center; }
+    .nav { background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 1rem 0; }
+    .nav-links { display: flex; justify-content: center; gap: 2rem; list-style: none; }
+    .nav-links a { text-decoration: none; color: #333; font-weight: 500; padding: 0.5rem 1rem; border-radius: 5px; transition: all 0.3s; }
+    .nav-links a:hover { background: #667eea; color: white; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+    .book-detail { background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 2rem; }
+    .book-header { background: #f8f9fa; padding: 2rem; }
+    .book-title { font-size: 2rem; font-weight: bold; margin-bottom: 0.5rem; color: #333; }
+    .book-author { font-size: 1.2rem; color: #666; margin-bottom: 1rem; }
+    .book-meta { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem; }
+    .meta-item { background: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem; }
+    .book-status { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
+    .status-available { background: #d4edda; color: #155724; }
+    .status-borrowed { background: #f8d7da; color: #721c24; }
+    .status-reserved { background: #fff3cd; color: #856404; }
+    .book-content { padding: 2rem; }
+    .book-description { font-size: 1.1rem; line-height: 1.6; margin-bottom: 2rem; color: #555; }
+    .book-details { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .detail-item { background: #f8f9fa; padding: 1rem; border-radius: 8px; }
+    .detail-label { font-weight: bold; color: #667eea; margin-bottom: 0.5rem; }
+    .detail-value { color: #333; }
+    .book-categories { margin-bottom: 2rem; }
+    .category-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .category-tag { background: #667eea; color: white; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.8rem; }
+    .book-actions { padding: 2rem; background: #f8f9fa; text-align: center; }
+    .btn { background: #667eea; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 5px; cursor: pointer; text-decoration: none; display: inline-block; transition: background 0.3s; font-size: 1rem; }
+    .btn:hover { background: #5a67d8; }
+    .btn-danger { background: #dc3545; }
+    .btn-danger:hover { background: #c82333; }
+    .btn-secondary { background: #6c757d; }
+    .btn-secondary:hover { background: #5a6268; }
+    .back-link { display: inline-block; margin-bottom: 1rem; color: #667eea; text-decoration: none; }
+    .back-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<a href="/q19/" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; text-decoration: none; padding: 10px 20px; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; color: #fff; font-family: sans-serif; font-weight: 600; font-size: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: all 0.3s ease; display: flex; align-items: center; gap: 8px;">
+    Next App
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 1 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/></svg>
+</a>
+
+
+
+
+  <div class="header">
+    <div class="container">
+      <h1> Book Details</h1>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <div class="container">
+      <ul class="nav-links">
+        <li><a href="/q15/">Home</a></li>
+        <li><a href="/q15/books/">Browse Books</a></li>
+        <li><a href="/q15/authors/">Authors</a></li>
+        <li><a href="/q15/categories/">Categories</a></li>
+        {% if user.is_authenticated %}
+          <li><a href="/q15/my-loans/">My Loans</a></li>
+          <li><a href="/accounts/logout/">Logout ({{ user.username }})</a></li>
+        {% else %}
+          <li><a href="/accounts/login/">Login</a></li>
+        {% endif %}
+        <li><a href="/admin/" target="_blank">Admin Panel</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container">
+    <a href="/q15/books/" class="back-link"> Back to Books</a>
+
+    <div class="book-detail">
+      <div class="book-header">
+        <div class="book-title">{{ book.title }}</div>
+        <div class="book-author">by {{ book.authors.all|join:", " }}</div>
+        <div class="book-meta">
+          <div class="meta-item">Published: {{ book.publication_date|date:"F j, Y" }}</div>
+          <div class="meta-item">Publisher: {{ book.publisher.name|default:"Unknown" }}</div>
+          <div class="meta-item">Pages: {{ book.pages }}</div>
+          <div class="meta-item">Price: $ {{ book.price }}</div>
+        </div>
+        <div class="book-status status-{{ book.status }}">{{ book.get_status_display }}</div>
+      </div>
+
+      <div class="book-content">
+        {% if book.description %}
+        <div class="book-description">{{ book.description }}</div>
+        {% endif %}
+
+        <div class="book-details">
+          <div class="detail-item">
+            <div class="detail-label">ISBN</div>
+            <div class="detail-value">{{ book.isbn|default:"Not available" }}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Stock Quantity</div>
+            <div class="detail-value">{{ book.stock_quantity }}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Added to Library</div>
+            <div class="detail-value">{{ book.created_at|date:"F j, Y" }}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Last Updated</div>
+            <div class="detail-value">{{ book.updated_at|date:"F j, Y" }}</div>
+          </div>
+        </div>
+
+        <div class="book-categories">
+          <h3>Categories</h3>
+          <div class="category-tags">
+            {% for category in book.categories.all %}
+            <span class="category-tag">{{ category.name }}</span>
+            {% empty %}
+            <span class="category-tag">No categories</span>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <div class="book-actions">
+        {% if user.is_authenticated %}
+          {% if can_borrow %}
+          <a href="/q15/borrow/{{ book.id }}/" class="btn" onclick="return confirm('Are you sure you want to borrow this book?')">Borrow This Book</a>
+          {% else %}
+          <span class="btn btn-secondary" style="cursor: not-allowed;">Book Not Available</span>
+          {% endif %}
+        {% else %}
+        <a href="/accounts/login/?next=/q15/books/{{ book.id }}/" class="btn">Login to Borrow</a>
+        {% endif %}
+        <a href="/q15/books/" class="btn btn-secondary">Browse More Books</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

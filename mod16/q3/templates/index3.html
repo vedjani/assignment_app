@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 500px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        input.invalid, textarea.invalid {
+            border-color: #e74c3c;
+            background-color: #fadbd8;
+        }
+        input.valid, textarea.valid {
+            border-color: #27ae60;
+            background-color: #d5f4e6;
+        }
+        .error-message {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+        .error-message.show {
+            display: block;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .success-message.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<a href="/q4/" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; text-decoration: none; padding: 10px 20px; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; color: #fff; font-family: sans-serif; font-weight: 600; font-size: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: all 0.3s ease; display: flex; align-items: center; gap: 8px;">
+    Next App
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 1 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/></svg>
+</a>
+
+
+
+
+    <div class="container">
+        <h1>Registration Form</h1>
+        <div class="success-message" id="successMessage">Form submitted successfully!</div>
+        
+        <form id="validationForm" novalidate>
+            <!-- Full Name -->
+            <div class="form-group">
+                <label for="fullname">Full Name:</label>
+                <input type="text" id="fullname" name="fullname" placeholder="Enter your full name">
+                <div class="error-message" id="fullnameError"></div>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email">
+                <div class="error-message" id="emailError"></div>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Enter a password (min 8 characters)">
+                <div class="error-message" id="passwordError"></div>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password">
+                <div class="error-message" id="confirmPasswordError"></div>
+            </div>
+
+            <!-- Phone Number -->
+            <div class="form-group">
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" placeholder="Enter your phone number">
+                <div class="error-message" id="phoneError"></div>
+            </div>
+
+            <!-- Age -->
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" placeholder="Enter your age" min="18" max="120">
+                <div class="error-message" id="ageError"></div>
+            </div>
+
+            <!-- Gender -->
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <select id="gender" name="gender">
+                    <option value="">-- Select Gender --</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+                <div class="error-message" id="genderError"></div>
+            </div>
+
+            <!-- Comments -->
+            <div class="form-group">
+                <label for="comments">Comments:</label>
+                <textarea id="comments" name="comments" rows="4" placeholder="Any additional comments..."></textarea>
+                <div class="error-message" id="commentsError"></div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit">Submit Form</button>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById('validationForm');
+        const successMessage = document.getElementById('successMessage');
+
+        // Validation functions
+        function validateFullName(value) {
+            return value.trim().length >= 3;
+        }
+
+        function validateEmail(value) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(value);
+        }
+
+        function validatePassword(value) {
+            return value.length >= 8;
+        }
+
+        function validateConfirmPassword(password, confirmPassword) {
+            return password === confirmPassword && confirmPassword.length > 0;
+        }
+
+        function validatePhone(value) {
+            const phoneRegex = /^[\d\s\-\+\(\)]{10,}$/;
+            return phoneRegex.test(value.replace(/\s/g, ''));
+        }
+
+        function validateAge(value) {
+            const age = parseInt(value);
+            return !isNaN(age) && age >= 18 && age <= 120;
+        }
+
+        function validateGender(value) {
+            return value !== '';
+        }
+
+        function validateComments(value) {
+            return value.trim().length <= 500;
+        }
+
+        // Display error and update field styling
+        function showError(fieldId, errorId, message) {
+            const field = document.getElementById(fieldId);
+            const errorDiv = document.getElementById(errorId);
+            field.classList.add('invalid');
+            field.classList.remove('valid');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('show');
+        }
+
+        // Clear error and update field styling
+        function clearError(fieldId, errorId) {
+            const field = document.getElementById(fieldId);
+            const errorDiv = document.getElementById(errorId);
+            field.classList.remove('invalid');
+            field.classList.add('valid');
+            errorDiv.classList.remove('show');
+        }
+
+        // Real-time validation on input
+        document.getElementById('fullname').addEventListener('blur', function() {
+            if (!validateFullName(this.value)) {
+                showError('fullname', 'fullnameError', 'Name must be at least 3 characters');
+            } else {
+                clearError('fullname', 'fullnameError');
+            }
+        });
+
+        document.getElementById('email').addEventListener('blur', function() {
+            if (!validateEmail(this.value)) {
+                showError('email', 'emailError', 'Please enter a valid email address');
+            } else {
+                clearError('email', 'emailError');
+            }
+        });
+
+        document.getElementById('password').addEventListener('blur', function() {
+            if (!validatePassword(this.value)) {
+                showError('password', 'passwordError', 'Password must be at least 8 characters');
+            } else {
+                clearError('password', 'passwordError');
+            }
+        });
+
+        document.getElementById('confirmPassword').addEventListener('blur', function() {
+            const password = document.getElementById('password').value;
+            if (!validateConfirmPassword(password, this.value)) {
+                showError('confirmPassword', 'confirmPasswordError', 'Passwords do not match');
+            } else {
+                clearError('confirmPassword', 'confirmPasswordError');
+            }
+        });
+
+        document.getElementById('phone').addEventListener('blur', function() {
+            if (this.value && !validatePhone(this.value)) {
+                showError('phone', 'phoneError', 'Please enter a valid phone number');
+            } else if (this.value) {
+                clearError('phone', 'phoneError');
+            }
+        });
+
+        document.getElementById('age').addEventListener('blur', function() {
+            if (this.value && !validateAge(this.value)) {
+                showError('age', 'ageError', 'Age must be between 18 and 120');
+            } else if (this.value) {
+                clearError('age', 'ageError');
+            }
+        });
+
+        document.getElementById('gender').addEventListener('change', function() {
+            if (!validateGender(this.value)) {
+                showError('gender', 'genderError', 'Please select a gender');
+            } else {
+                clearError('gender', 'genderError');
+            }
+        });
+
+        document.getElementById('comments').addEventListener('blur', function() {
+            if (!validateComments(this.value)) {
+                showError('comments', 'commentsError', 'Comments must not exceed 500 characters');
+            } else {
+                clearError('comments', 'commentsError');
+            }
+        });
+
+        // Form submission validation
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Validate all fields
+            const fullname = document.getElementById('fullname').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const phone = document.getElementById('phone').value;
+            const age = document.getElementById('age').value;
+            const gender = document.getElementById('gender').value;
+            const comments = document.getElementById('comments').value;
+
+            let isValid = true;
+
+            if (!validateFullName(fullname)) {
+                showError('fullname', 'fullnameError', 'Name must be at least 3 characters');
+                isValid = false;
+            } else {
+                clearError('fullname', 'fullnameError');
+            }
+
+            if (!validateEmail(email)) {
+                showError('email', 'emailError', 'Please enter a valid email address');
+                isValid = false;
+            } else {
+                clearError('email', 'emailError');
+            }
+
+            if (!validatePassword(password)) {
+                showError('password', 'passwordError', 'Password must be at least 8 characters');
+                isValid = false;
+            } else {
+                clearError('password', 'passwordError');
+            }
+
+            if (!validateConfirmPassword(password, confirmPassword)) {
+                showError('confirmPassword', 'confirmPasswordError', 'Passwords do not match');
+                isValid = false;
+            } else {
+                clearError('confirmPassword', 'confirmPasswordError');
+            }
+
+            if (phone && !validatePhone(phone)) {
+                showError('phone', 'phoneError', 'Please enter a valid phone number');
+                isValid = false;
+            } else if (phone) {
+                clearError('phone', 'phoneError');
+            }
+
+            if (age && !validateAge(age)) {
+                showError('age', 'ageError', 'Age must be between 18 and 120');
+                isValid = false;
+            } else if (age) {
+                clearError('age', 'ageError');
+            }
+
+            if (!validateGender(gender)) {
+                showError('gender', 'genderError', 'Please select a gender');
+                isValid = false;
+            } else {
+                clearError('gender', 'genderError');
+            }
+
+            if (!validateComments(comments)) {
+                showError('comments', 'commentsError', 'Comments must not exceed 500 characters');
+                isValid = false;
+            } else {
+                clearError('comments', 'commentsError');
+            }
+
+            // If all validations pass, show success message
+            if (isValid) {
+                successMessage.classList.add('show');
+                console.log('Form Data:', {
+                    fullname,
+                    email,
+                    password,
+                    phone,
+                    age,
+                    gender,
+                    comments
+                });
+                // Reset form after 2 seconds
+                setTimeout(() => {
+                    form.reset();
+                    successMessage.classList.remove('show');
+                    document.querySelectorAll('input, textarea').forEach(field => {
+                        field.classList.remove('valid', 'invalid');
+                    });
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>

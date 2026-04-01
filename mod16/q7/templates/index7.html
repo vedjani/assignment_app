@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MVT Showcase</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(155deg, #0e224e, #4e5d87 70%); color: #f1f5f9; min-height: 100vh; }
+        .site { width: min(1140px, 100%); margin: 0 auto; padding: 26px 16px 40px; }
+        .top-panel { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.18); border-radius: 16px; padding: 20px; backdrop-filter: blur(6px); box-shadow: 0 14px 36px rgba(2, 13, 36, 0.46); margin-bottom: 20px; }
+        .top-panel h1 { font-size: 30px; color: #d7eaff; margin-bottom: 10px; }
+        .top-panel p { font-size: 1rem; color: #dbe6f8; margin-bottom: 16px; }
+        .mvt-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin-bottom: 24px; }
+        .mvt-card { background: rgba(255,255,255,0.13); border: 1px solid rgba(185, 206, 255, 0.35); border-radius: 12px; padding: 14px 12px; min-height: 130px; }
+        .mvt-card h3 { color: #c8e8ff; margin-bottom: 8px; font-size: 1.1rem; }
+        .mvt-card p { color: #e5f0ff; font-size: 0.93rem; line-height: 1.43; }
+        .mvt-card code { background: rgba(255,255,255,0.2); color: #eef8ff; padding: 1px 4px; border-radius: 4px; }
+        .cards-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(255px,1fr)); gap: 20px; }
+        .card { background: #ffffff; border-radius: 16px; padding: 22px; box-shadow: 0 12px 30px rgba(31,45,77,0.24); color: #1f2b42; border: 1px solid #dee6f5; transition: transform .2s ease, box-shadow .2s ease; }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 22px 40px rgba(31,45,77,0.3); }
+        .profile-image { width: 82px; height: 82px; margin: 0 auto 14px; border-radius: 50%; background: linear-gradient(125deg, #5a8ffc, #427ddf); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 30px; font-weight: 800; letter-spacing: 1px; }
+        .name { text-align: center; font-size: 1.2rem; font-weight: 700; color: #1e2e55; margin-bottom: 6px; }
+        .profession { text-align: center; color: #3e5d91; font-weight: 600; margin-bottom: 12px; }
+        .description { color: #556d91; text-align: center; font-size: 0.97rem; line-height: 1.5; min-height: 54px; margin-bottom: 12px; }
+        .social-links { display: flex; justify-content: center; gap: 10px; }
+        .social-link { width: 36px; height: 36px; border-radius: 50%; background: #dfecff; color: #315a99; display: grid; place-items: center; text-decoration: none; transition: transform .15s ease, filter .15s ease; }
+        .social-link:hover { transform: scale(1.08); filter: brightness(0.92); }
+        @media (max-width: 720px) { .site { padding: 16px 12px 30px; } .top-panel { padding: 14px; } }
+    </style>
+</head>
+<body>
+
+<a href="/q8/" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; text-decoration: none; padding: 10px 20px; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; color: #fff; font-family: sans-serif; font-weight: 600; font-size: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: all 0.3s ease; display: flex; align-items: center; gap: 8px;">
+    Next App
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 1 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/></svg>
+</a>
+
+
+
+
+    <div class="site">
+        <div class="top-panel">
+            <h1>MVT Architecture</h1>
+            <p>Interactive example of Django architecture in one page. Dynamically rendered data on cards with clear Model-View-Template explanation.</p>
+            <div class="mvt-cards">
+                <div class="mvt-card">
+                    <h3>Model</h3>
+                    <p>Defines doctor data fields and database schema in <code>models.py</code>. In this demo, the list is in the view for quick preview.</p>
+                </div>
+                <div class="mvt-card">
+                    <h3>View</h3>
+                    <p><code>q7/views.py</code> builds <code>doctors</code> list and renders template with <code>render(request, 'index7.html', context)</code>.</p>
+                </div>
+                <div class="mvt-card">
+                    <h3>Template</h3>
+                    <p>This file loops <code>doctors</code> and renders cards. It is your presentation layer.</p>
+                </div>
+            </div>
+        </div>
+        <div class="cards-container">
+            {% for doctor in doctors %}
+            <div class="card">
+                <div class="profile-image">{{ doctor.initials }}</div>
+                <div class="name">{{ doctor.name }}</div>
+                <div class="profession">{{ doctor.speciality }}</div>
+                <div class="description">{{ doctor.bio }}</div>
+                <div class="social-links">
+                    {% for link in doctor.links %}
+                        <a href="{{ link.url }}" class="social-link" title="{{ link.title }}">{{ link.emoji }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

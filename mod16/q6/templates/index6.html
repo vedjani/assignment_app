@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Directory</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #1f2a44;
+            background: linear-gradient(145deg, #f3f7ff 40%, #d5e6ff 100%);
+            min-height: 100vh;
+            padding: 30px;
+        }
+
+        .wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            padding: 28px 32px;
+            backdrop-filter: blur(4px);
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+            color: #0c2f60;
+        }
+
+        .header p {
+            color: #425180;
+            font-size: 16px;
+        }
+
+        .search-bar {
+            margin-top: 18px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            max-width: 420px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            border: 1px solid #aec6e7;
+            outline: none;
+            font-size: 15px;
+            transition: all 0.25s ease;
+        }
+
+        .search-bar input:focus {
+            border-color: #5d8fea;
+            box-shadow: 0 0 0 4px rgba(93, 143, 234, 0.15);
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            grid-gap: 20px;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 18px;
+            border: 1px solid #e4eaf8;
+            box-shadow: 0 12px 25px rgba(38, 71, 130, 0.10);
+            padding: 26px;
+            transition: all 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 18px 30px rgba(38, 71, 130, 0.16);
+        }
+
+        .profile-image {
+            width: 95px;
+            height: 95px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6a8ef5 0%, #5b7cd8 100%);
+            margin: 0 auto 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 32px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .name {
+            font-size: 20px;
+            font-weight: 700;
+            text-align: center;
+            color: #12224f;
+            margin-bottom: 6px;
+        }
+
+        .profession {
+            text-align: center;
+            color: #4570a0;
+            font-weight: 600;
+            margin-bottom: 14px;
+        }
+
+        .description {
+            color: #5d6f90;
+            line-height: 1.6;
+            text-align: center;
+            padding: 0 8px;
+            margin-bottom: 16px;
+            min-height: 52px;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #eef4ff;
+            color: #3b62aa;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            font-size: 18px;
+        }
+
+        .social-link:hover {
+            background: #3f69b6;
+            color: white;
+            transform: scale(1.07);
+        }
+
+        @media (max-width: 650px) {
+            .wrapper {
+                padding: 0 8px;
+            }
+            .header {
+                padding: 20px;
+            }
+            .header h1 { font-size: 26px; }
+        }
+    </style>
+</head>
+<body>
+
+<a href="/q7/" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; text-decoration: none; padding: 10px 20px; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; color: #fff; font-family: sans-serif; font-weight: 600; font-size: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: all 0.3s ease; display: flex; align-items: center; gap: 8px;">
+    Next App
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 1 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/></svg>
+</a>
+
+
+
+
+    <div class="wrapper">
+        <div class="header">
+            <h1>Doctor Profile Directory</h1>
+            <p>Browse and manage doctor profiles with a clean UI. This page is generated from your Django context.</p>
+            <div class="search-bar">
+                <input type="search" placeholder="Search doctors (client-side placeholder, no JS)" disabled />
+            </div>
+        </div>
+
+        <div class="cards-container">
+            {% for doctor in doctors %}
+            <div class="card">
+                <div class="profile-image">{{ doctor.initials }}</div>
+                <h2 class="name">{{ doctor.name }}</h2>
+                <p class="profession">{{ doctor.speciality }}</p>
+                <p class="description">{{ doctor.bio }}</p>
+                <div class="social-links">
+                    {% for link in doctor.links %}
+                        <a href="{{ link.url }}" class="social-link" title="{{ link.title }}">{{ link.emoji }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

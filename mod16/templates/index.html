@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ved's Assignment Viewer</title>
+    <!-- Google Fonts for Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- Google Material Symbols -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" />
+    <style>
+        :root {
+            --bg-blur: 16px;
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #0f0c29; /* fallback for old browsers */
+            background: linear-gradient(135deg, #020024 0%, #090979 35%, #00d4ff 100%);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            color: var(--text-primary);
+        }
+
+        /* Animated Dark/Vibrant Gradient Background */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Abstract Floating Shapes for more Aesthetic feel */
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+        }
+        .shape-1 {
+            width: 400px;
+            height: 400px;
+            background: #ff00cc;
+            top: -100px;
+            left: -100px;
+            animation: float 8s ease-in-out infinite;
+        }
+        .shape-2 {
+            width: 500px;
+            height: 500px;
+            background: #333399;
+            bottom: -150px;
+            right: -100px;
+            animation: float 12s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-30px) scale(1.05); }
+        }
+
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 1200px;
+            padding: 3rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Majestic Glowing Heading */
+        .header-title {
+            font-size: 4.5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 3rem;
+            text-align: center;
+            background: linear-gradient(to right, #fff, #d1d5db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+            animation: slideDown 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .header-subtitle {
+            font-weight: 300;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            margin-top: -2.5rem;
+            margin-bottom: 4rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            animation: fadeIn 1.5s ease;
+        }
+
+        /* App Grid Layout */
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 2.5rem;
+            width: 100%;
+            justify-content: center;
+            max-width: 900px;
+            padding: 2rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--bg-blur));
+            -webkit-backdrop-filter: blur(var(--bg-blur));
+            border-radius: 40px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            animation: zoomIn 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Individual App Item */
+        .app-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: white;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            group: hover;
+        }
+
+        .app-item:hover {
+            transform: translateY(-15px) scale(1.1);
+        }
+
+        /* App Icon Styling */
+        .app-icon {
+            width: 85px;
+            height: 85px;
+            border-radius: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2), inset 0 2px 2px rgba(255,255,255,0.4);
+            margin-bottom: 12px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .app-item:hover .app-icon {
+            box-shadow: 0 20px 30px rgba(0,0,0,0.4), inset 0 2px 2px rgba(255,255,255,0.6);
+            border-radius: 20px;
+        }
+
+        /* Material symbol within the icon */
+        .app-icon .material-symbols-rounded {
+            font-size: 40px;
+            color: white;
+            z-index: 2;
+            transition: transform 0.4s ease;
+        }
+
+        .app-item:hover .app-icon .material-symbols-rounded {
+            transform: scale(1.15);
+        }
+
+        /* Dynamic reflection on icon */
+        .app-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(255,255,255,0));
+            z-index: 1;
+        }
+
+        /* App Label */
+        .app-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            transition: opacity 0.3s ease;
+            letter-spacing: 0.5px;
+        }
+
+        /* Animations */
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes zoomIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Responsive Details */
+        @media (max-width: 768px) {
+            .header-title { font-size: 3rem; }
+            .app-grid { gap: 1.5rem; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); padding: 1.5rem; border-radius: 30px;}
+            .app-icon { width: 70px; height: 70px; border-radius: 20px;}
+            .app-icon .material-symbols-rounded { font-size: 32px; }
+            .app-name { font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+
+    <div class="container">
+        <h1 class="header-title">ved's assigment</h1>
+        <p class="header-subtitle">Module 16 Applications</p>
+
+        <div class="app-grid">
+            {% for app in apps %}
+            <a href="{{ app.url }}" class="app-item">
+                <div class="app-icon" style="background: {{ app.color }};">
+                    <span class="material-symbols-rounded">{{ app.icon }}</span>
+                </div>
+                <span class="app-name">{{ app.name }}</span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
