@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- SPIDEY FONTS --><link href="https://fonts.googleapis.com/css2?family=Bangers&family=Oswald:wght@400;600&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
@@ -10,10 +11,10 @@
             max-width: 600px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f5f5f5;
+            background: rgba(0,0,0,0.6);
         }
         .profile-container {
-            background-color: white;
+            background: rgba(0,0,0,0.6);
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -24,7 +25,7 @@
         .profile-info p {
             margin: 10px 0;
             padding: 10px;
-            background-color: #f8f9fa;
+            background: rgba(0,0,0,0.6);
             border-radius: 4px;
         }
         .btn {
@@ -46,6 +47,99 @@
             background-color: #545b62;
         }
     </style>
+
+    <!-- Automatically injected responsive styles -->
+    <style>
+        html, body { max-width: 100%; overflow-x: hidden; }
+        body { padding: 10px; box-sizing: border-box; }
+        img, video, iframe, canvas, table { max-width: 100%; height: auto; display: block; overflow-x: auto; }
+        .container, main, section, div { box-sizing: border-box; max-width: 100%; }
+        /* Add some margin to tables on mobile so they scroll instead of break width */
+        table { display: block; overflow-x: auto; white-space: nowrap; }
+    </style>
+
+
+<!-- SPIDEY THEME INJECT -->
+<style>
+    :root {
+        --spidey-red: #D92525;
+        --spidey-blue: #0A2463;
+        --spidey-dark: #070b14;
+        --spidey-light: #e2e8f0;
+    }
+    body {
+        background-color: var(--spidey-dark) !important;
+        color: var(--spidey-light) !important;
+        font-family: 'Oswald', sans-serif, system-ui !important;
+        background-image: 
+            radial-gradient(circle at 10% 10%, rgba(217, 37, 37, 0.15) 0%, transparent 50%),
+            repeating-linear-gradient(45deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 20px) !important;
+    }
+    h1, h2, h3 { 
+        font-family: 'Bangers', cursive, impact !important; 
+        color: var(--spidey-red) !important; 
+        letter-spacing: 2px !important;
+        text-shadow: 2px 2px 0 var(--spidey-blue) !important;
+        margin-bottom: 1rem !important;
+    }
+    a { color: #00f0ff !important; text-decoration: none !important; }
+    a:hover { color: var(--spidey-red) !important; text-decoration: underline !important; }
+
+    /* Tables */
+    table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; background: rgba(10, 36, 99, 0.4) !important; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.5) !important; color: white !important;}
+    th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    th { background-color: var(--spidey-blue) !important; color: white !important; font-weight: bold; text-transform: uppercase; font-family: 'Oswald', sans-serif; letter-spacing: 1px; }
+    tr:hover { background-color: rgba(217, 37, 37, 0.3) !important; }
+
+    /* Forms */
+    option { background: var(--spidey-dark) !important; color: white !important; }
+    .output, .result, .message, .alert { background: rgba(0,0,0,0.5) !important; border: 1px solid var(--spidey-blue) !important; color: var(--spidey-light) !important; padding: 15px !important; border-radius: 8px !important; }
+    form { margin-bottom: 2rem; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 12px; border: 1px solid var(--spidey-blue); }
+    label { font-weight: bold; margin-bottom: 5px; display: block; color: var(--spidey-light) !important; font-family: 'Oswald', sans-serif; letter-spacing: 1px; }
+    input[type="text"], input[type="number"], input[type="email"], input[type="password"], select, textarea {
+        width: 100%; max-width: 500px; padding: 12px; margin: 8px 0 20px 0;
+        background: rgba(255,255,255,0.05) !important; color: white !important;
+        border: 2px solid var(--spidey-blue) !important; border-radius: 4px; font-family: inherit;
+    }
+    input:focus, select:focus, textarea:focus { border-color: var(--spidey-red) !important; outline: none; box-shadow: 0 0 8px rgba(217, 37, 37, 0.8) !important; }
+
+    /* Buttons */
+    button, input[type="submit"], .btn {
+        background: var(--spidey-red) !important; color: white !important; border: none !important;
+        padding: 12px 25px !important; font-size: 1.1rem !important; font-weight: bold !important; cursor: pointer;
+        border-radius: 4px !important; text-transform: uppercase !important; font-family: 'Oswald', sans-serif !important; letter-spacing: 1px;
+        box-shadow: 4px 4px 0 var(--spidey-blue) !important; transition: all 0.2s !important; display: inline-block; text-align: center; margin-top: 10px;
+    }
+    button:hover, input[type="submit"]:hover, .btn:hover {
+        transform: translateY(-2px) !important; box-shadow: 6px 6px 0 var(--spidey-blue) !important; background: rgba(0,0,0,0.6);
+    }
+
+
+    /* MOBILE & TABLET RESPONSIVE FIXES */
+    @media (max-width: 1024px) {
+        .container, main, .content, form {
+            padding: 20px !important;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        body { padding: 10px !important; }
+        h1 { font-size: 2.5rem !important; }
+        h2 { font-size: 2rem !important; }
+        .container, main, .content { padding: 15px !important; border-radius: 8px !important; }
+        form { padding: 15px !important; margin-bottom: 1.5rem !important; }
+        input[type="text"], input[type="number"], input[type="email"], input[type="password"], select, textarea {
+            width: 100% !important; max-width: none !important;
+        }
+        table { display: block !important; overflow-x: auto !important; white-space: nowrap !important; font-size: 0.95rem !important; }
+        th, td { padding: 8px 10px !important; }
+        button, input[type="submit"], .btn { width: 100% !important; font-size: 1.1rem !important; margin-bottom: 5px; }
+        .next-app-btn { bottom: 10px !important; right: 10px !important; padding: 8px 15px !important; font-size: 12px !important; }
+    }
+
+</style>
+<!-- END SPIDEY THEME -->
+
 </head>
 <body>
 

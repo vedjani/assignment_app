@@ -1,248 +1,439 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ved's Assignment Viewer</title>
-    <!-- Google Fonts for Modern Typography -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <!-- Google Material Symbols -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ved's Assignment | Interactive 3D Spidey</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bangers&family=Permanent+Marker&family=Space+Grotesk:wght@500;700&display=swap"
+        rel="stylesheet">
     <style>
         :root {
-            --bg-blur: 16px;
-            --glass-bg: rgba(255, 255, 255, 0.08);
-            --glass-border: rgba(255, 255, 255, 0.2);
-            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-            --text-primary: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.7);
+            --spidey-red: #ff003c;
+            --spidey-cyan: #00f0ff;
+            --spidey-blue: #0A1B3F;
+            --spidey-white: #f8fafc;
+            --spidey-dark: #070b14;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Outfit', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--spidey-dark);
+            color: var(--spidey-white);
             min-height: 100vh;
-            background: #0f0c29; /* fallback for old browsers */
-            background: linear-gradient(135deg, #020024 0%, #090979 35%, #00d4ff 100%);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            overflow-x: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
-            overflow-x: hidden;
-            color: var(--text-primary);
+            background-image: radial-gradient(rgba(255, 255, 255, 0.1) 2px, transparent 2px);
+            background-size: 20px 20px;
         }
 
-        /* Animated Dark/Vibrant Gradient Background */
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* Giant Background Graffiti Text */
+        .bg-graffiti {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-10deg);
+            font-family: 'Permanent Marker', cursive;
+            font-size: 18vw;
+            color: transparent;
+            -webkit-text-stroke: 4px rgba(255, 255, 255, 0.05);
+            white-space: nowrap;
+            z-index: -2;
+            pointer-events: none;
+            text-shadow: 15px 15px 50px rgba(255, 0, 60, 0.6), -15px -15px 50px rgba(0, 240, 255, 0.4);
+            animation: pulseGraffiti 4s ease-in-out infinite alternate;
         }
 
-        /* Abstract Floating Shapes for more Aesthetic feel */
-        .shape {
-            position: absolute;
+        @keyframes pulseGraffiti {
+            0% {
+                transform: translate(-50%, -50%) rotate(-10deg) scale(1);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) rotate(-8deg) scale(1.05);
+            }
+        }
+
+        /* Ambient Spray Paint Blobs */
+        .spray-blob {
+            position: fixed;
             border-radius: 50%;
-            filter: blur(80px);
-            z-index: 0;
-        }
-        .shape-1 {
-            width: 400px;
-            height: 400px;
-            background: #ff00cc;
-            top: -100px;
-            left: -100px;
-            animation: float 8s ease-in-out infinite;
-        }
-        .shape-2 {
-            width: 500px;
-            height: 500px;
-            background: #333399;
-            bottom: -150px;
-            right: -100px;
-            animation: float 12s ease-in-out infinite reverse;
+            filter: blur(100px);
+            opacity: 0.5;
+            z-index: -3;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-30px) scale(1.05); }
+        .spray-red {
+            top: -10vh;
+            right: -10vw;
+            width: 60vh;
+            height: 60vh;
+            background: var(--spidey-red);
         }
 
-        /* Main Container */
+        .spray-cyan {
+            bottom: -10vh;
+            left: -10vw;
+            width: 50vh;
+            height: 50vh;
+            background: var(--spidey-cyan);
+            opacity: 0.4;
+        }
+
+        /* Hanging Spider */
+        .spider-container {
+            position: fixed;
+            top: 0;
+            left: 15%;
+            width: 2px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: -1;
+            animation: spiderDrop 8s ease-in-out infinite alternate;
+        }
+
+        .spider-thread {
+            width: 2px;
+            height: 350px;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .spider-emoji {
+            font-size: 3rem;
+            transform: rotate(180deg);
+            margin-top: -15px;
+            filter: drop-shadow(0 10px 10px rgba(255, 0, 60, 0.8));
+        }
+
+        .s2 {
+            left: 85%;
+            animation-duration: 12s;
+            animation-delay: -5s;
+        }
+
+        .s2 .spider-thread {
+            height: 450px;
+        }
+
+        @keyframes spiderDrop {
+            0% {
+                margin-top: -400px;
+            }
+
+            100% {
+                margin-top: 50px;
+            }
+        }
+
+        /* Container */
         .container {
+            width: 100%;
+            max-width: 1500px;
+            padding: 4rem 2rem;
             position: relative;
             z-index: 1;
-            width: 100%;
-            max-width: 1200px;
-            padding: 3rem 2rem;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        /* Majestic Glowing Heading */
-        .header-title {
-            font-size: 4.5rem;
-            font-weight: 800;
+        /* Epic Header */
+        .header {
+            text-align: center;
+            margin-bottom: 5rem;
+            animation: dropIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes dropIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-100px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header h1 {
+            font-family: 'Bangers', cursive;
+            font-size: 7rem;
+            letter-spacing: 5px;
+            color: var(--spidey-red);
+            text-shadow: 4px 4px 0 var(--spidey-cyan), -2px -2px 0 #fff;
+            transform: rotate(-2deg);
+            margin-bottom: 1rem;
+        }
+
+        .header p {
+            font-family: 'Permanent Marker', cursive;
+            font-size: 1.8rem;
+            color: var(--spidey-dark);
+            background: #fcee0a;
+            display: inline-block;
+            padding: 5px 25px;
+            transform: rotate(2deg);
+            box-shadow: 5px 5px 0 var(--spidey-cyan);
+        }
+
+        /* Flat Interactive 3D Grid */
+        .hero-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 4rem 3rem;
+            width: 100%;
+            padding-bottom: 5rem;
+            perspective: 1000px;
+        }
+
+        /* 3D Interactive Card */
+        .hero-card {
+            background: rgba(10, 27, 63, 0.95);
+            border: 3px solid var(--spidey-white);
+            border-radius: 20px;
+            padding: 3rem 2.5rem;
+            text-decoration: none;
+            color: var(--spidey-white);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            box-shadow: 12px 12px 0 var(--spidey-red);
+            position: relative;
+            transform-style: preserve-3d;
+            transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);
+            transition: box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+        }
+
+        .hero-card.smooth-return {
+            transition: transform 0.5s ease-out, box-shadow 0.3s ease, background 0.3s ease;
+        }
+
+        .hero-card:hover {
+            border-color: var(--spidey-cyan);
+            box-shadow: 20px 20px 0 var(--spidey-red), 0 0 50px rgba(0, 240, 255, 0.3);
+            background: rgba(30, 20, 50, 0.98);
+        }
+
+        /* Inner Pop Elements */
+        .module-number {
+            font-family: 'Bangers', cursive;
+            font-size: 5.5rem;
+            line-height: 1;
+            margin-bottom: 1rem;
+            color: var(--spidey-white);
+            text-shadow: 4px 4px 0 var(--spidey-cyan);
+            transform: translateZ(50px);
+            transition: all 0.3s ease-out;
+            pointer-events: none;
+        }
+
+        .hero-card:hover .module-number {
+            color: #fff;
+            text-shadow: 6px 6px 0 var(--spidey-red);
+            transform: translateZ(90px) scale(1.1);
+        }
+
+        .module-name {
+            font-size: 1.6rem;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 2px;
-            margin-bottom: 3rem;
-            text-align: center;
-            background: linear-gradient(to right, #fff, #d1d5db);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
-            animation: slideDown 1s cubic-bezier(0.16, 1, 0.3, 1);
+            margin-bottom: 10px;
+            transform: translateZ(30px);
+            transition: all 0.3s ease-out;
+            pointer-events: none;
         }
 
-        .header-subtitle {
-            font-weight: 300;
-            color: var(--text-secondary);
-            font-size: 1.2rem;
-            margin-top: -2.5rem;
-            margin-bottom: 4rem;
-            letter-spacing: 4px;
+        .hero-card:hover .module-name {
+            color: #fcee0a;
+            transform: translateZ(60px);
+        }
+
+        .action-text {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--spidey-cyan);
             text-transform: uppercase;
-            animation: fadeIn 1.5s ease;
+            letter-spacing: 2px;
+            transform: translateZ(20px);
+            transition: all 0.3s ease-out;
+            pointer-events: none;
         }
 
-        /* App Grid Layout */
-        .app-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-            gap: 2.5rem;
-            width: 100%;
-            justify-content: center;
-            max-width: 900px;
-            padding: 2rem;
-            background: var(--glass-bg);
-            backdrop-filter: blur(var(--bg-blur));
-            -webkit-backdrop-filter: blur(var(--bg-blur));
-            border-radius: 40px;
-            border: 1px solid var(--glass-border);
-            box-shadow: var(--glass-shadow);
-            animation: zoomIn 1s cubic-bezier(0.16, 1, 0.3, 1);
+        .hero-card:hover .action-text {
+            color: #fff;
+            transform: translateZ(40px);
         }
 
-        /* Individual App Item */
-        .app-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            color: white;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer;
-            group: hover;
+        /* ========================================================= */
+        /* RESPONSIVE DESIGN (TABLET & MOBILE BUG FIXES)             */
+        /* ========================================================= */
+
+        /* TABLET OPTIMIZATION (Up to 1024px) */
+        @media (max-width: 1024px) {
+            .header h1 {
+                font-size: 5.5rem;
+            }
+
+            .hero-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 3rem 2rem;
+            }
+
+            .hero-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .module-number {
+                font-size: 4.5rem;
+            }
         }
 
-        .app-item:hover {
-            transform: translateY(-15px) scale(1.1);
-        }
-
-        /* App Icon Styling */
-        .app-icon {
-            width: 85px;
-            height: 85px;
-            border-radius: 24px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2), inset 0 2px 2px rgba(255,255,255,0.4);
-            margin-bottom: 12px;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s ease;
-        }
-
-        .app-item:hover .app-icon {
-            box-shadow: 0 20px 30px rgba(0,0,0,0.4), inset 0 2px 2px rgba(255,255,255,0.6);
-            border-radius: 20px;
-        }
-
-        /* Material symbol within the icon */
-        .app-icon .material-symbols-rounded {
-            font-size: 40px;
-            color: white;
-            z-index: 2;
-            transition: transform 0.4s ease;
-        }
-
-        .app-item:hover .app-icon .material-symbols-rounded {
-            transform: scale(1.15);
-        }
-
-        /* Dynamic reflection on icon */
-        .app-icon::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 50%;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(255,255,255,0));
-            z-index: 1;
-        }
-
-        /* App Label */
-        .app-name {
-            font-size: 0.95rem;
-            font-weight: 600;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-            transition: opacity 0.3s ease;
-            letter-spacing: 0.5px;
-        }
-
-        /* Animations */
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes zoomIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        /* Responsive Details */
+        /* MOBILE OPTIMIZATION (Up to 768px) */
         @media (max-width: 768px) {
-            .header-title { font-size: 3rem; }
-            .app-grid { gap: 1.5rem; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); padding: 1.5rem; border-radius: 30px;}
-            .app-icon { width: 70px; height: 70px; border-radius: 20px;}
-            .app-icon .material-symbols-rounded { font-size: 32px; }
-            .app-name { font-size: 0.85rem; }
+            .bg-graffiti {
+                font-size: 25vw;
+            }
+
+            .header h1 {
+                font-size: 4rem;
+                letter-spacing: 2px;
+            }
+
+            .header p {
+                font-size: 1.2rem;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+                display: flex;
+                flex-direction: column;
+            }
+
+            /* Disable JS 3D on mobile for better touch experience, rely on simple CSS */
+            .hero-card {
+                transform: none !important;
+                transition: all 0.3s ease !important;
+                border-radius: 12px;
+                box-shadow: 8px 8px 0 var(--spidey-red);
+            }
+
+            .hero-card:active {
+                transform: scale(0.96) !important;
+                box-shadow: 4px 4px 0 var(--spidey-red);
+            }
+
+            .module-number {
+                font-size: 4.5rem;
+                transform: none !important;
+            }
+
+            .module-name,
+            .action-text {
+                transform: none !important;
+            }
+
+            /* Hide giant spray blobs on mobile to prevent overflow/lag */
+            .spray-cyan,
+            .spray-red {
+                width: 30vh;
+                height: 30vh;
+            }
+        }
+
+        /* TOUCH-ONLY DEVICES: Physically disable transform pop-outs so screen doesn't jitter */
+        @media (hover: none) and (pointer: coarse) {
+            .hero-card {
+                transform: none !important;
+                transition: all 0.3s ease !important;
+            }
+
+            .module-number,
+            .module-name,
+            .action-text {
+                transform: none !important;
+            }
         }
     </style>
 </head>
+
 <body>
-    <div class="shape shape-1"></div>
-    <div class="shape shape-2"></div>
+    <div class="bg-graffiti">SPIDER-VERSE</div>
+    <div class="spray-blob spray-red"></div>
+    <div class="spray-blob spray-cyan"></div>
+
+    <div class="spider-container">
+        <div class="spider-thread"></div>
+        <div class="spider-emoji">🕷️</div>
+    </div>
+    <div class="spider-container s2">
+        <div class="spider-thread"></div>
+        <div class="spider-emoji">🕷️</div>
+    </div>
 
     <div class="container">
-        <h1 class="header-title">ved's assigment</h1>
-        <p class="header-subtitle">Module 16 Applications</p>
+        <div class="header">
+            <h1>VED'S ASSIGNMENT</h1>
+            <p>Into the Workspace-Verse</p>
+        </div>
 
-        <div class="app-grid">
+        <div class="hero-grid">
             {% for app in apps %}
-            <a href="{{ app.url }}" class="app-item">
-                <div class="app-icon" style="background: {{ app.color }};">
-                    <span class="material-symbols-rounded">{{ app.icon }}</span>
-                </div>
-                <span class="app-name">{{ app.name }}</span>
+            <a href="{{ app.url }}" class="hero-card smooth-return">
+                <div class="module-number">{{ app.icon }}</div>
+                <div class="module-name">{{ app.name }}{{ app.icon }}</div>
+                <div class="action-text">Swing In ⇾</div>
             </a>
             {% endfor %}
         </div>
     </div>
+
+    <!-- The Magic: Interactive 3D Hover Tracking JS -->
+    <script>
+        // Only run 3D tracker on Desktop (width > 1024) AND devices mapped to mouse hover
+        if (window.matchMedia("(hover: hover) and (pointer: fine)").matches && window.innerWidth > 1024) {
+            const cards = document.querySelectorAll('.hero-card');
+
+            cards.forEach(card => {
+                card.addEventListener('mousemove', e => {
+                    card.classList.remove('smooth-return');
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const maxRotate = 25;
+                    const rotateX = ((y - centerY) / centerY) * -maxRotate;
+                    const rotateY = ((x - centerX) / centerX) * maxRotate;
+
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.classList.add('smooth-return');
+                    card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+                });
+            });
+        }
+    </script>
 </body>
+
 </html>

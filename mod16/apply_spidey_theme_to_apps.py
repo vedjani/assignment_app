@@ -1,23 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <!-- SPIDEY FONTS --><link href="https://fonts.googleapis.com/css2?family=Bangers&family=Oswald:wght@400;600&display=swap" rel="stylesheet">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background: rgba(0,0,0,0.6);
-        }
-        h1 {
-            color: #333;
-            margin-top: 50px;
-        }
-    </style>
+import os
+import glob
+import re
 
+base_dir = r"c:\Users\vedja\OneDrive\Desktop\lab-mod16\mod16"
+html_files = glob.glob(os.path.join(base_dir, "q*", "**", "*.html"), recursive=True)
 
+spidey_theme = """
 <!-- SPIDEY THEME INJECT -->
 <style>
     :root {
@@ -51,8 +39,6 @@
     tr:hover { background-color: rgba(217, 37, 37, 0.3) !important; }
 
     /* Forms */
-    option { background: var(--spidey-dark) !important; color: white !important; }
-    .output, .result, .message, .alert { background: rgba(0,0,0,0.5) !important; border: 1px solid var(--spidey-blue) !important; color: var(--spidey-light) !important; padding: 15px !important; border-radius: 8px !important; }
     form { margin-bottom: 2rem; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 12px; border: 1px solid var(--spidey-blue); }
     label { font-weight: bold; margin-bottom: 5px; display: block; color: var(--spidey-light) !important; font-family: 'Oswald', sans-serif; letter-spacing: 1px; }
     input[type="text"], input[type="number"], input[type="email"], input[type="password"], select, textarea {
@@ -70,45 +56,31 @@
         box-shadow: 4px 4px 0 var(--spidey-blue) !important; transition: all 0.2s !important; display: inline-block; text-align: center; margin-top: 10px;
     }
     button:hover, input[type="submit"], .btn:hover {
-        transform: translateY(-2px) !important; box-shadow: 6px 6px 0 var(--spidey-blue) !important; background: rgba(0,0,0,0.6);
+        transform: translateY(-2px) !important; box-shadow: 6px 6px 0 var(--spidey-blue) !important; background: #ff1a1a !important;
     }
-
-
-    /* MOBILE & TABLET RESPONSIVE FIXES */
-    @media (max-width: 1024px) {
-        .container, main, .content, form {
-            padding: 20px !important;
-        }
-    }
-    
-    @media (max-width: 768px) {
-        body { padding: 10px !important; }
-        h1 { font-size: 2.5rem !important; }
-        h2 { font-size: 2rem !important; }
-        .container, main, .content { padding: 15px !important; border-radius: 8px !important; }
-        form { padding: 15px !important; margin-bottom: 1.5rem !important; }
-        input[type="text"], input[type="number"], input[type="email"], input[type="password"], select, textarea {
-            width: 100% !important; max-width: none !important;
-        }
-        table { display: block !important; overflow-x: auto !important; white-space: nowrap !important; font-size: 0.95rem !important; }
-        th, td { padding: 8px 10px !important; }
-        button, input[type="submit"], .btn { width: 100% !important; font-size: 1.1rem !important; margin-bottom: 5px; }
-        .next-app-btn { bottom: 10px !important; right: 10px !important; padding: 8px 15px !important; font-size: 12px !important; }
-    }
-
 </style>
 <!-- END SPIDEY THEME -->
+"""
 
-<body>
+count = 0
+for path in html_files:
+    # Exclude main launcher
+    if r"templates\index.html" in path and not re.search(r"q\d+", path):
+        continue
+        
+    with open(path, 'r', encoding='utf-8') as f:
+        content = f.read()
 
-<a href="/q3/" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; text-decoration: none; padding: 10px 20px; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; color: #fff; font-family: sans-serif; font-weight: 600; font-size: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: all 0.3s ease; display: flex; align-items: center; gap: 8px;">
-    Next App
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 1 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/></svg>
-</a>
+    if "SPIDEY THEME INJECT" not in content:
+        if "</head>" in content.lower():
+            content = re.sub(r'(</head>)', spidey_theme + r'\n\1', content, count=1, flags=re.IGNORECASE)
+        elif "<body" in content.lower():
+            content = re.sub(r'(<body[^>]*>)', spidey_theme + r'\n\1', content, count=1, flags=re.IGNORECASE)
+        else:
+            content = spidey_theme + "\n" + content
+            
+        with open(path, 'w', encoding='utf-8') as f:
+            f.write(content)
+        count += 1
 
-
-
-
-    <h1>Welcome to Django</h1>
-</body>
-</html>
+print(f"Fixed injection applied to {count} sub-app templates.")
